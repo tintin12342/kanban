@@ -1,0 +1,70 @@
+<h4 class="dialog-title">
+  Create a new {{ data.status | statusEnumConverter | lowercase }} task
+</h4>
+
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="taskForm" (ngSubmit)="onCreate()" class="form-container">
+    <!-- Title Field -->
+    <mat-form-field appearance="outline">
+      <mat-label>Task Title</mat-label>
+      <input class="font-size" matInput formControlName="title" required />
+      <mat-hint align="end">{{ titleLength }}/100</mat-hint>
+
+      @if (taskForm.get("title")?.hasError("required")) {
+        <mat-error> <mat-icon>error</mat-icon> Title is required </mat-error>
+      }
+      @if (taskForm.get("title")?.hasError("maxlength")) {
+        <mat-error>
+          <mat-icon>error</mat-icon> Title cannot exceed 100 characters
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Description Field -->
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea
+        class="font-size"
+        matInput
+        formControlName="description"
+        required
+        rows="4"
+      ></textarea>
+      <mat-hint align="end">{{ descriptionLength }}/400</mat-hint>
+
+      @if (taskForm.get("description")?.hasError("required")) {
+        <mat-error>
+          <mat-icon>error</mat-icon> Description is required
+        </mat-error>
+      }
+      @if (taskForm.get("description")?.hasError("maxlength")) {
+        <mat-error>
+          <mat-icon>error</mat-icon> Description cannot exceed 400 characters
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Priority Field -->
+    <div class="priority-section">
+      <mat-label class="priority-label">Priority</mat-label>
+      <mat-radio-group formControlName="priority" class="radio-group">
+        <mat-radio-button [value]="Priority.LOW">Low</mat-radio-button>
+        <mat-radio-button [value]="Priority.MED">Medium</mat-radio-button>
+        <mat-radio-button [value]="Priority.HIGH">High</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button (click)="onNoClick()" class="cancel-btn">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!taskForm.valid"
+    (click)="onCreate()"
+    class="create-btn"
+  >
+    Create Task
+  </button>
+</mat-dialog-actions>
