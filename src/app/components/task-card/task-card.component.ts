@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { Task } from '../../models/task.model';
-import {MatDividerModule} from '@angular/material/divider';
+import { Priority, Task } from '../../models/task.model';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-task-card',
@@ -12,4 +12,6 @@ import {MatDividerModule} from '@angular/material/divider';
 })
 export class TaskCardComponent {
   @Input() task!: Task;
+
+  readonly Priority = Priority;
 }

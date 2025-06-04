@@ -8,6 +8,7 @@ import { AsyncPipe } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateNewTaskDialogComponent } from '../../dialogs/create-new-task-dialog/create-new-task-dialog.component';
+import { UpdateTaskDialogComponent } from '../../dialogs/update-task-dialog/update-task-dialog.component';
 
 const MAT_MODULES = [
   MatButtonModule,
@@ -44,6 +45,26 @@ export class KanbanBoardComponent {
           .subscribe((tasks) => {
             this.tasks = of(tasks);
           });
+      }
+    });
+  }
+
+  updateTask(selectedTask: Task): void {
+    const dialogRef = this.#dialog.open(UpdateTaskDialogComponent, {
+      data: { task: selectedTask },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.delete) {
+        console.log('Deleting task:', result.task);
+        this.#tasksService.deleteTask(result).subscribe((tasks) => {
+          this.tasks = of(tasks);
+        });
+      } else if (result) {
+        console.log('Updating task:', result);
+        this.#tasksService.updateTask(result).subscribe((tasks) => {
+          this.tasks = of(tasks);
+        });
       }
     });
   }

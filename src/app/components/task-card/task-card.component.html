@@ -2,14 +2,20 @@
   <mat-card-header>
     <mat-card-title>{{ task.title }}</mat-card-title>
   </mat-card-header>
-  
+
   <mat-card-content>
     <p>{{ task.description }}</p>
   </mat-card-content>
 
   <mat-card-footer class="card-footer">
-    <mat-chip mat-chip highlighted>
-      {{ task.priority }}
+    <mat-chip
+      [class.low]="task.priority === Priority.LOW"
+      [class.med]="task.priority === Priority.MED"
+      [class.high]="task.priority === Priority.HIGH"
+      mat-chip
+      highlighted
+    >
+      <span class="font-size">{{ task.priority }}</span>
     </mat-chip>
   </mat-card-footer>
 </mat-card>

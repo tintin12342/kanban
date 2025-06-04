@@ -3,6 +3,7 @@
     <div class="title-container">
       <h4>TO DO</h4>
       <button
+        class="font-size"
         mat-button
         matTooltip="Add new to do task"
         matTooltipPosition="above"
@@ -15,7 +16,11 @@
     <div>
       @for (task of tasks | async; track $index) {
         @if (task.status === Status.TO_DO) {
-          <app-task-card [task]="task"></app-task-card>
+          <app-task-card
+            style="cursor: pointer"
+            [task]="task"
+            (click)="updateTask(task)"
+          ></app-task-card>
         }
       }
     </div>
@@ -24,6 +29,7 @@
     <div class="title-container">
       <h4>IN PROGRESS</h4>
       <button
+        class="font-size"
         mat-button
         matTooltip="Add new in progress task"
         matTooltipPosition="above"
@@ -36,7 +42,10 @@
     <div>
       @for (task of tasks | async; track $index) {
         @if (task.status === Status.IN_PROGRESS) {
-          <app-task-card [task]="task"></app-task-card>
+          <app-task-card
+            [task]="task"
+            (click)="updateTask(task)"
+          ></app-task-card>
         }
       }
     </div>
@@ -45,6 +54,7 @@
     <div class="title-container">
       <h4>DONE</h4>
       <button
+        class="font-size"
         mat-button
         matTooltip="Add new done task"
         matTooltipPosition="above"
@@ -57,7 +67,10 @@
     <div>
       @for (task of tasks | async; track $index) {
         @if (task.status === Status.DONE) {
-          <app-task-card [task]="task"></app-task-card>
+          <app-task-card
+            [task]="task"
+            (click)="updateTask(task)"
+          ></app-task-card>
         }
       }
     </div>

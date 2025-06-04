@@ -1,3 +1,7 @@
+.font-size {
+    font-size: small;
+}
+
 .card {
     background-color: white;
     margin: 1rem;
@@ -5,4 +9,16 @@
 
 .card-footer {
     padding: 1rem;
+}
+
+.low {
+    background-color: #25a42c !important;
+}
+
+.med {
+    background-color: #c86807 !important;
+}
+
+.high {
+    background-color: #d70e0e !important;
 }
