@@ -52,9 +52,11 @@ export class UpdateTaskDialogComponent {
     title: [this.data.task.title, [Validators.required, Validators.maxLength(100)]],
     description: [this.data.task.description, [Validators.required, Validators.maxLength(400)]],
     priority: [this.data.task.priority, Validators.required],
+    status: [this.data.task.status, Validators.required],
   });
 
   readonly Priority = Priority;
+  readonly Status = Status;
 
   get descriptionLength(): number {
     return this.taskForm.get('description')?.value?.length || 0;

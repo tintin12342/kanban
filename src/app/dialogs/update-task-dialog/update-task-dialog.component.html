@@ -45,12 +45,22 @@
     </mat-form-field>
 
     <!-- Priority Field -->
-    <div class="priority-section">
-      <mat-label class="priority-label">Priority</mat-label>
+    <div class="radio-section">
+      <mat-label class="radio-label">Priority</mat-label>
       <mat-radio-group formControlName="priority" class="radio-group">
         <mat-radio-button [value]="Priority.LOW">Low</mat-radio-button>
         <mat-radio-button [value]="Priority.MED">Medium</mat-radio-button>
         <mat-radio-button [value]="Priority.HIGH">High</mat-radio-button>
+      </mat-radio-group>
+    </div>
+   
+    <!-- Priority Field -->
+    <div class="radio-section">
+      <mat-label class="radio-label">Status</mat-label>
+      <mat-radio-group formControlName="status" class="radio-group">
+        <mat-radio-button [value]="Status.TO_DO">To do</mat-radio-button>
+        <mat-radio-button [value]="Status.IN_PROGRESS">In progress</mat-radio-button>
+        <mat-radio-button [value]="Status.DONE">Done</mat-radio-button>
       </mat-radio-group>
     </div>
   </form>
