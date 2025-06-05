@@ -1,78 +1,33 @@
 <div class="kanban-board mat-elevation-z4">
-  <div class="column">
-    <div class="title-container">
-      <h4>TO DO</h4>
-      <button
-        class="font-size"
-        mat-button
-        matTooltip="Add new to do task"
-        matTooltipPosition="above"
-        matTooltipShowDelay="200"
-        (click)="addTask(Status.TO_DO)"
-      >
-        +
-      </button>
-    </div>
-    <div>
-      @for (task of tasks | async; track $index) {
-        @if (task.status === Status.TO_DO) {
-          <app-task-card
-            style="cursor: pointer"
-            [task]="task"
-            (click)="updateTask(task)"
-          ></app-task-card>
+  @for (
+    status of [Status.TO_DO, Status.IN_PROGRESS, Status.DONE];
+    track status
+  ) {
+    <div class="column">
+      <div class="title-container">
+        <h4>{{ status | statusEnumConverter }}</h4>
+        <button
+          class="font-size"
+          mat-button
+          [matTooltip]="'Add new ' + status.toLowerCase() + ' task'"
+          matTooltipPosition="above"
+          matTooltipShowDelay="200"
+          (click)="addTask(status)"
+        >
+          +
+        </button>
+      </div>
+      <div>
+        @for (task of tasks | async; track task.id) {
+          @if (task.status === status) {
+            <app-task-card
+              style="cursor: pointer"
+              [task]="task"
+              (click)="updateTask(task)"
+            ></app-task-card>
+          }
         }
-      }
+      </div>
     </div>
-  </div>
-  <div class="column">
-    <div class="title-container">
-      <h4>IN PROGRESS</h4>
-      <button
-        class="font-size"
-        mat-button
-        matTooltip="Add new in progress task"
-        matTooltipPosition="above"
-        matTooltipShowDelay="200"
-        (click)="addTask(Status.IN_PROGRESS)"
-      >
-        +
-      </button>
-    </div>
-    <div>
-      @for (task of tasks | async; track $index) {
-        @if (task.status === Status.IN_PROGRESS) {
-          <app-task-card
-            [task]="task"
-            (click)="updateTask(task)"
-          ></app-task-card>
-        }
-      }
-    </div>
-  </div>
-  <div class="column">
-    <div class="title-container">
-      <h4>DONE</h4>
-      <button
-        class="font-size"
-        mat-button
-        matTooltip="Add new done task"
-        matTooltipPosition="above"
-        matTooltipShowDelay="200"
-        (click)="addTask(Status.DONE)"
-      >
-        +
-      </button>
-    </div>
-    <div>
-      @for (task of tasks | async; track $index) {
-        @if (task.status === Status.DONE) {
-          <app-task-card
-            [task]="task"
-            (click)="updateTask(task)"
-          ></app-task-card>
-        }
-      }
-    </div>
-  </div>
+  }
 </div>

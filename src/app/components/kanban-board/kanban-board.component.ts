@@ -9,6 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateNewTaskDialogComponent } from '../../dialogs/create-new-task-dialog/create-new-task-dialog.component';
 import { UpdateTaskDialogComponent } from '../../dialogs/update-task-dialog/update-task-dialog.component';
+import { StatusEnumConverterPipe } from '../../pipes/status-enum-converter.pipe';
 
 const MAT_MODULES = [
   MatButtonModule,
@@ -20,7 +21,7 @@ const MAT_MODULES = [
 
 @Component({
   selector: 'app-kanban-board',
-  imports: [MAT_MODULES],
+  imports: [MAT_MODULES, StatusEnumConverterPipe],
   templateUrl: './kanban-board.component.html',
   styleUrl: './kanban-board.component.scss',
 })
