@@ -1,0 +1,20 @@
+@use '@angular/material' as mat;
+
+@mixin material-theme() {
+    @include mat.core();
+
+    $primary-palette: mat.$m2-blue-palette;
+    $accent-palette: mat.$m2-blue-palette;
+    $warn-palette: mat.$m2-red-palette;
+
+    $custom-primary: mat.m2-define-palette($primary-palette);
+    $custom-accent: mat.m2-define-palette($accent-palette);
+    $custom-warn: mat.m2-define-palette($warn-palette);
+
+    $custom-theme: mat.m2-define-light-theme((color: (primary: $custom-primary,
+                    accent: $custom-accent,
+                    warn: $custom-warn,
+                )));
+
+    @include mat.all-component-themes($custom-theme);
+}
