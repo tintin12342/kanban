@@ -10,7 +10,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { take } from 'rxjs';
 
 const MAT_MODULES = [
   ReactiveFormsModule,
@@ -28,6 +30,8 @@ const MAT_MODULES = [
   styleUrls: ['./login.component.html', '../../shared/styles/auth-styles.scss'],
 })
 export class LoginComponent {
+  #authService = inject(AuthService);
+  #router = inject(Router);
   #fb = inject(FormBuilder);
 
   loginForm: FormGroup = this.#fb.group({
@@ -45,7 +49,20 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      console.log('Login form submitted', this.loginForm.value);
+      const email = this.loginForm.value.email;
+      const password = this.loginForm.value.password;
+
+      this.#authService
+        .login(email, password)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.#router.navigate(['/dashboard']);
+          },
+          error: (err) => {
+            console.error(err.error.message || 'Login failed');
+          },
+        });
     }
   }
 }

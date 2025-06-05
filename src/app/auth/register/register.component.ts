@@ -10,7 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 const MAT_MODULES = [
   ReactiveFormsModule,
@@ -32,6 +33,8 @@ const MAT_MODULES = [
   ],
 })
 export class RegisterComponent {
+  #authService = inject(AuthService);
+  #router = inject(Router);
   #fb = inject(FormBuilder);
 
   registerForm: FormGroup = this.#fb.group({
@@ -55,10 +58,26 @@ export class RegisterComponent {
     return this.registerForm.get('password');
   }
 
-  onSubmit() {
-    if (this.registerForm.valid) {
-      console.log('Register form submitted', this.registerForm.value);
-      // Add your registration logic here
-    }
+  onSubmit(): void {
+    if (this.registerForm.invalid) return;
+    const { firstName, lastName, email, password } = this.registerForm.value;
+
+    this.#authService
+      .register({
+        firstName,
+        lastName,
+        email,
+        password,
+      })
+      .subscribe({
+        next: () => {
+          this.#router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          console.error(
+            err.error?.message || 'Registration failed. Please try again.',
+          );
+        },
+      });
   }
 }
