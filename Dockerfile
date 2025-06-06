@@ -1,7 +1,3 @@
-# For Railway
-ENV PORT=80
-EXPOSE $PORT
-
 # Stage 1: Build the Angular app
 FROM node:20-alpine AS build
 WORKDIR /app
@@ -30,8 +26,9 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy the built app from the previous stage
 COPY --from=build /app/dist/kanban/browser /usr/share/nginx/html
 
-# Expose port 80
-EXPOSE 80
+# Environment variables for Railway
+ENV PORT=80
+EXPOSE $PORT
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
