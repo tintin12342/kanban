@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { Status, Task } from '../../models/task.model';
+import { Status, Task, TaskApiResult } from '../../models/task.model';
 import { TasksService } from '../../services/tasks.service';
-import { Observable, of, take } from 'rxjs';
+import { Observable, BehaviorSubject, switchMap, tap, take } from 'rxjs';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { AsyncPipe } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -21,6 +21,7 @@ const MAT_MODULES = [
 
 @Component({
   selector: 'app-kanban-board',
+  standalone: true,
   imports: [MAT_MODULES, StatusEnumConverterPipe],
   templateUrl: './kanban-board.component.html',
   styleUrl: './kanban-board.component.scss',
@@ -30,8 +31,12 @@ export class KanbanBoardComponent {
   #dialog = inject(MatDialog);
 
   readonly Status = Status;
-
-  tasks: Observable<Task[]> = this.#tasksService.getTasks();
+  
+  #refreshTrigger = new BehaviorSubject<void>(undefined);
+  
+  taskApiResult$: Observable<TaskApiResult> = this.#refreshTrigger.pipe(
+    switchMap(() => this.#tasksService.getTasks().pipe(take(1)))
+  );
 
   addTask(status: Status): void {
     const dialogRef = this.#dialog.open(CreateNewTaskDialogComponent, {
@@ -39,13 +44,11 @@ export class KanbanBoardComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result !== undefined) {
-        this.#tasksService
-          .createTask(result)
-          .pipe(take(1))
-          .subscribe((tasks) => {
-            this.tasks = of(tasks);
-          });
+      if (result) {
+        this.#tasksService.createTask(result).pipe(take(1)).subscribe({
+          next: () => this.#refreshTrigger.next(),
+          error: (err) => console.error('Error creating task:', err)
+        });
       }
     });
   }
@@ -57,14 +60,14 @@ export class KanbanBoardComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.delete) {
-        console.log('Deleting task:', result.task);
-        this.#tasksService.deleteTask(result).subscribe((tasks) => {
-          this.tasks = of(tasks);
+        this.#tasksService.deleteTask(result.task.id).pipe(take(1)).subscribe({
+          next: () => this.#refreshTrigger.next(),
+          error: (err) => console.error('Error deleting task:', err)
         });
       } else if (result) {
-        console.log('Updating task:', result);
-        this.#tasksService.updateTask(result).subscribe((tasks) => {
-          this.tasks = of(tasks);
+        this.#tasksService.updateTask(result.id, result).pipe(take(1)).subscribe({
+          next: () => this.#refreshTrigger.next(),
+          error: (err) => console.error('Error updating task:', err)
         });
       }
     });

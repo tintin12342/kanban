@@ -22,7 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 
 interface DialogData {
-  task: Task; // Changed from status to receive the full task
+  task: Task;
 }
 
 const MAT_MODULES = [

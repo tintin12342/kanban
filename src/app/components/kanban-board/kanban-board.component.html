@@ -1,33 +1,35 @@
 <div class="kanban-board mat-elevation-z4">
-  @for (
-    status of [Status.TO_DO, Status.IN_PROGRESS, Status.DONE];
-    track status
-  ) {
-    <div class="column">
-      <div class="title-container">
-        <h4>{{ status | statusEnumConverter }}</h4>
-        <button
-          class="font-size"
-          mat-button
-          [matTooltip]="'Add new ' + status.toLowerCase() + ' task'"
-          matTooltipPosition="above"
-          matTooltipShowDelay="200"
-          (click)="addTask(status)"
-        >
-          +
-        </button>
-      </div>
-      <div>
-        @for (task of tasks | async; track task.id) {
-          @if (task.status === status) {
-            <app-task-card
-              style="cursor: pointer"
-              [task]="task"
-              (click)="updateTask(task)"
-            ></app-task-card>
+  @if (taskApiResult$ | async; as tasks) {
+    @for (
+      status of [Status.TO_DO, Status.IN_PROGRESS, Status.DONE];
+      track status
+    ) {
+      <div class="column">
+        <div class="title-container">
+          <h4>{{ status | statusEnumConverter }}</h4>
+          <button
+            class="font-size"
+            mat-button
+            [matTooltip]="'Add new ' + status.toLowerCase() + ' task'"
+            matTooltipPosition="above"
+            matTooltipShowDelay="200"
+            (click)="addTask(status)"
+          >
+            +
+          </button>
+        </div>
+        <div>
+          @for (task of tasks.content; track task.id) {
+            @if (task.status === status) {
+              <app-task-card
+                style="cursor: pointer"
+                [task]="task"
+                (click)="updateTask(task)"
+              ></app-task-card>
+            }
           }
-        }
+        </div>
       </div>
-    </div>
+    }
   }
 </div>

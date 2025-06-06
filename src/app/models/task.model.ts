@@ -16,4 +16,15 @@ export interface Task {
   description: string;
   status: Status;
   priority: Priority;
+  version: number;
+}
+
+export interface TaskApiResult {
+  content: Task[];
+  page: {
+    number: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  };
 }
