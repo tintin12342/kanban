@@ -8,7 +8,7 @@ export const routes: Routes = [
   {
     path: '',
     component: KanbanBoardComponent,
-    //canActivate: [authGuard]
+    canActivate: [authGuard]
   },
   {
     path: 'login',
